@@ -20,9 +20,11 @@ import { RadioButton } from 'react-native-paper';
 import { register } from '../redux/actions/auth';
 import { useDispatch } from 'react-redux';
 import { connect } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 const Signup = props => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [state, setState] = useState({
     fullName: '',
     email: '',
@@ -75,6 +77,7 @@ const Signup = props => {
     console.log('before-register');
 
     props.register({ name: state.fullName, ...state });
+    navigation.navigate('Login');
 
     //console.log('after-register');
   };

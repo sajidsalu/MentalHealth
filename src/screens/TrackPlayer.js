@@ -11,9 +11,12 @@ import {colors} from '../constants/theme';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useState} from 'react';
 import SoundPlayer from 'react-native-sound-player';
+import {BackHandler} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 const Track = props => {
   const [play, setPlay] = useState(false);
+  const navigation = useNavigation();
   useEffect(() => {
     SoundPlayer.loadUrl(props.route.params.audio);
   }, []);
@@ -25,7 +28,20 @@ const Track = props => {
     SoundPlayer.pause();
     setPlay(!play);
   };
+  useEffect(() => {
+    const backAction = () => {
+      SoundPlayer.stop();
+      navigation.goBack();
+      return true;
+    };
 
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   return (
     <View style={styles.container}>
       <View>

@@ -31,7 +31,7 @@ const FitnessScreen = () => {
       //setIsLoading(true);
       try {
         const result = await axios(url);
-
+        console.log('categories are', categories);
         setCategories(result.data);
         setCategoryData(Object.keys(result.data));
         //console.log(result.data)

@@ -62,7 +62,7 @@ const TabNavigation = () => {
       <Tab.Screen name="Home" component={HomeStackNavigator} />
       <Tab.Screen name="Story" component={StoryScreen} />
       <Tab.Screen name="Therapist" component={TherapistStackNavigation} />
-      <Tab.Screen name="Fitness" component={FitnessStackNavigator} />
+      {/* <Tab.Screen name="Fitness" component={FitnessStackNavigator} /> */}
     </Tab.Navigator>
   );
 };

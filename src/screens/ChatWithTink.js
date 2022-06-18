@@ -55,7 +55,7 @@ const ChatWithTink = props => {
       id: '6',
       message:
         'I can give you some motivational quotes from successfull people.',
-      trigger: '7',
+      trigger: '16',
     },
     {
       id: '7',
@@ -66,7 +66,7 @@ const ChatWithTink = props => {
     {
       id: '8',
       options: [
-        {value: 1, label: 'Another quote', trigger: '7'},
+        {value: 1, label: 'Another quote', trigger: '14'},
         {value: 2, label: 'Feeling motivated', trigger: '9'},
       ],
     },
@@ -102,6 +102,18 @@ const ChatWithTink = props => {
       id: '14',
       message: 'Sorry. I will work on my sense of humour.',
       trigger: '2',
+    },
+    {
+      id: '15',
+      message:
+        'If you look at what you have in life, you will always have more. If you look at what you dont have in life, you will never have enough. -Oprah Winfrey',
+      trigger: '8',
+    },
+    {
+      id: '16',
+      message:
+        'The future belongs to those who believe in the beauty of their dreams. -Eleanor Roosevelt',
+      trigger: 8,
     },
   ];
 

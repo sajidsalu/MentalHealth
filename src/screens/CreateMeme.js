@@ -12,29 +12,34 @@ import axios from 'axios';
 import {ActivityIndicator} from 'react-native-paper';
 import {colors} from '../constants/theme';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {memeData} from '../constants/memeData';
+import {useNavigation} from '@react-navigation/native';
 
 const CreateMeme = () => {
-  const [loading, setLoading] = useState(true);
-  const [memeArray, setMemeArray] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [memeArray, setMemeArray] = useState(memeData);
   const [meme, setMeme] = useState(null);
   const [randomIndex, setRandomIndex] = useState(0);
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
 
   useEffect(() => {
-    axios
-      .get('http://alpha-meme-maker.herokuapp.com/2')
-      .then(res => {
-        setMemeArray(res.data.data);
-        console.log(res.data.data);
-        setLoading(false);
-        setMeme(res.data.data[0]);
-        console.log(meme);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    // axios
+    //   .get('http://alpha-meme-maker.herokuapp.com/2')
+    //   .then(res => {
+    //     console.log('meme response', res.data.data);
+    //     setMemeArray(res.data.data);
+    //     console.log(res.data.data);
+    //     setLoading(false);
+    //     setMeme(res.data.data[0]);
+    //     console.log(meme);
+    //   })
+    //   .catch(err => {
+    //     console.log('meme error', err);
+    //     console.log(err);
+    //   });
   }, []);
+  const navigation = useNavigation();
 
   const generateRandomNumber = () => {
     const rand = Math.floor(Math.random() * memeArray.length);
@@ -83,7 +88,7 @@ const CreateMeme = () => {
                     style={styles.textInput}
                     placeholder={'Top Text'}
                     value={topText}
-                    onChangeText={text => {
+                    onChangeText={(text) => {
                       setTopText(text);
                     }}
                   />
@@ -91,12 +96,15 @@ const CreateMeme = () => {
                     style={styles.textInput}
                     placeholder={'Bottom Text'}
                     value={bottomText}
-                    onChangeText={text => {
+                    onChangeText={(text) => {
                       setBottomText(text);
                     }}
                   />
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.goBack();
+                  }}>
                   <View style={styles.postButton}>
                     <Text
                       style={{

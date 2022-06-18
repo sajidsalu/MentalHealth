@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,16 +9,16 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  ToastAndroid
+  ToastAndroid,
 } from 'react-native';
-import { colors } from '../constants/theme';
-import { connect } from 'react-redux';
-import { login } from '../redux/actions/auth';
+import {colors} from '../constants/theme';
+import {connect} from 'react-redux';
+import {login} from '../redux/actions/auth';
 
-const Login = props => {
+const Login = (props) => {
   const [state, setState] = useState({
     email: '',
-    password: ''
+    password: '',
   });
 
   const handleLogin = () => {
@@ -32,25 +32,25 @@ const Login = props => {
     if (state.password.length < 6) {
       ToastAndroid.show(
         'Password must contain 6 characters',
-        ToastAndroid.SHORT
+        ToastAndroid.SHORT,
       );
       return;
     }
 
-    props.login({ ...state });
+    props.login({...state});
 
     //console.log('after-register');
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: colors.white }}>
+    <ScrollView style={{flex: 1, backgroundColor: colors.white}}>
       <View style={styles.container}>
         <View>
           <Image
             source={require('../../assets/yoga_main.jpg')}
             style={{
               width: Dimensions.get('screen').width,
-              height: Dimensions.get('screen').width
+              height: Dimensions.get('screen').width,
             }}
           />
         </View>
@@ -60,10 +60,10 @@ const Login = props => {
             style={styles.textInput}
             placeholder={'Email'}
             value={state.email}
-            onChangeText={text => {
+            onChangeText={(text) => {
               setState({
                 ...state,
-                email: text
+                email: text,
               });
             }}
           />
@@ -71,10 +71,10 @@ const Login = props => {
             style={styles.textInput}
             placeholder={'Password'}
             value={state.password}
-            onChangeText={text => {
+            onChangeText={(text) => {
               setState({
                 ...state,
-                password: text
+                password: text,
               });
             }}
             secureTextEntry={true}
@@ -93,13 +93,13 @@ const Login = props => {
   );
 };
 
-export default connect(null, { login })(Login);
+export default connect(null, {login})(Login);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     zIndex: 100,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
   },
   signUpContainer: {
     backgroundColor: colors.white,
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    top: -10
+    top: -10,
   },
   textInput: {
     backgroundColor: colors.accent,
@@ -116,15 +116,15 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     elevation: 1,
     padding: 10,
-    color: colors.black
+    color: colors.black,
   },
   radioButton: {
     flexDirection: 'row',
-    paddingLeft: 20
+    paddingLeft: 20,
   },
   radio: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   submitButton: {
     alignSelf: 'center',
@@ -133,14 +133,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.yellow,
     height: 40,
-    borderRadius: 60
+    borderRadius: 60,
   },
   submitText: {
     color: colors.white,
     textTransform: 'uppercase',
     fontWeight: 'bold',
     fontSize: 15,
-    letterSpacing: 2
+    letterSpacing: 2,
   },
   headerText: {
     color: colors.secondary,
@@ -148,12 +148,12 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     padding: 10,
     alignSelf: 'center',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   already: {
     alignSelf: 'flex-end',
     paddingRight: 20,
     paddingBottom: 10,
-    color: colors.secondary
-  }
+    color: colors.secondary,
+  },
 });

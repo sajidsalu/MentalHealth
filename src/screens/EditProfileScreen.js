@@ -24,6 +24,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {concerns} from '../constants/concerns';
 import {updateUser} from '../redux/actions/profile';
 import {connect} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 const Profile = props => {
   const [checked, setChecked] = useState(props.auth.profile.gender);
@@ -34,6 +35,7 @@ const Profile = props => {
   const [email, setEmail] = useState(props.auth.user.email);
   const [phone, setPhone] = useState(props.auth.profile.phone_no);
   const [age, setAge] = useState(props.auth.profile.age);
+  const navigation = useNavigation();
 
   const hasErrors = () => {
     return !email.includes('@');
@@ -81,6 +83,7 @@ const Profile = props => {
       selectedConcerns,
       props.auth.user._id,
     );
+    navigation.goBack();
   };
 
   return (

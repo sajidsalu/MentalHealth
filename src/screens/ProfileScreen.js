@@ -23,8 +23,9 @@ import futureData from '../constants/futureData';
 import Appointments from '../components/Appointments';
 import {connect} from 'react-redux';
 
-const ProfileScreen = props => {
+const ProfileScreen = (props) => {
   // const user=useSelector((state)=>state.user)
+  console.log('conerens in redux store is', props.auth.profile.concerns);
   const [selectedConcerns, setSelectedConcerns] = useState(
     props.auth.profile.concerns,
   );
@@ -62,7 +63,7 @@ const ProfileScreen = props => {
             size={20}
             color={colors.tertiary}
           />
-          <Text style={styles.otherInfo}>{props.auth.profile.gender}</Text>
+          <Text style={styles.otherInfo}>{props.auth.user.gender}</Text>
         </View>
         <View style={styles.infoBox}>
           <MaterialCommunityIcons
@@ -70,13 +71,11 @@ const ProfileScreen = props => {
             size={20}
             color={colors.tertiary}
           />
-          <Text style={styles.otherInfo}>
-            {props.auth.profile.age} yrs. old
-          </Text>
+          <Text style={styles.otherInfo}>{props.auth.user.age} yrs. old</Text>
         </View>
         <View style={styles.infoBox}>
           <Feather name="phone" size={20} color={colors.tertiary} />
-          <Text style={styles.otherInfo}>{props.auth.profile.phone_no}</Text>
+          <Text style={styles.otherInfo}>{props.auth.user.phone_no}</Text>
         </View>
         <View style={styles.infoBox}>
           <MaterialCommunityIcons
@@ -90,7 +89,7 @@ const ProfileScreen = props => {
       <View style={styles.concernContainer}>
         <Text style={styles.concernTitle}>My Concerns:</Text>
         <View style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
-          {concerns.map(chip => {
+          {concerns.map((chip) => {
             return (
               <Chip
                 key={chip.id}
@@ -116,7 +115,7 @@ const ProfileScreen = props => {
     </ScrollView>
   );
 };
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 

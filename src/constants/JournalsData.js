@@ -28,5 +28,4 @@ export const data=[
         time:'05:17 PM',
         content:'I am having a good day today.I had the best sleep at night.No-one is with me when i put up my views on anything like i did in office meeting.But now i dont care about what everyone is thinking of me.I have this App that removes all my stress by its soothing music section.I feel happy now.'
     },
-    
 ]

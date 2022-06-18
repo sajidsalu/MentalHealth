@@ -1,4 +1,5 @@
 import React, {useRef, useState} from 'react';
+import {useRoute, useNavigation} from '@react-navigation/native';
 import {
   StyleSheet,
   Text,
@@ -21,6 +22,7 @@ const AddStory = props => {
   const RichText = useRef(); //reference to the RichEditor component
   const [article, setArticle] = useState('');
   const {data} = props.route.params;
+  const navigation = useNavigation();
 
   function onPressAddImage() {
     // you can easily add images from your gallery
@@ -85,7 +87,11 @@ const AddStory = props => {
             marginBottom: 10,
             backgroundColor: colors.yellow,
           }}
-          onPress={() => console.log('')}>
+          onPress={() =>{
+
+            console.log('done pressed');
+            navigation.navigate('JournalScreen');
+          }}>
           <Text style={[styles.text]}>
             <Entypo name="check" size={20} color="black" /> Done
           </Text>

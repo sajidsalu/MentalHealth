@@ -56,18 +56,18 @@ const preferences = [
   },
 ];
 
-const HomeScreen = props => {
+const HomeScreen = (props) => {
   const [modalVisible, setModalVisible] = useState(true);
   const [playlist, setPlaylist] = useState([]);
   const [selectedConcerns, setSelectedConcerns] = useState([]);
-
+  const [quoteOfTheDay, setQuote] = useState('');
   useEffect(() => {
     fetchQuoteOfTheDay();
   }, []);
 
   useEffect(() => {
     // console.log(selectedConcerns);
-    console.log(props.auth.profile);
+    console.log('authenticated data', props.auth);
   });
 
   useEffect(() => {
@@ -84,7 +84,7 @@ const HomeScreen = props => {
       },
       data: 'grant_type=client_credentials',
       method: 'POST',
-    }).then(tokenResponse => {
+    }).then((tokenResponse) => {
       axios(
         `https://api.spotify.com/v1/browse/categories/${'wellness'}/playlists?limit=10`,
         {
@@ -93,17 +93,31 @@ const HomeScreen = props => {
             Authorization: 'Bearer ' + tokenResponse.data.access_token,
           },
         },
-      ).then(playlistResponse => {
+      ).then((playlistResponse) => {
         //console.log('playlist', playlistResponse.data.playlists.items);
         setPlaylist(playlistResponse.data.playlists.items);
       });
     });
+    axios('https://type.fit/api/quotes', {
+      method: 'GET',
+    })
+      .then((response) => {
+        console.log('index is', Math.floor(Math.random() * 10 + 1));
+        const quote = response.data[Math.floor(Math.random() * 10 + 1)];
+        console.log('Quote is', quote.text);
+        //setQuote(response.data[Math.floor(Math.random() * 10 + 1)]);
+        setQuote(quote.text);
+      })
+      .catch((error) => {
+        console.log('error is', error);
+        setQuote('Be yourself no matter what they say!');
+      });
   }, []);
 
-  const handleConcernSelection = id => {
+  const handleConcernSelection = (id) => {
     if (selectedConcerns.includes(id)) {
       setSelectedConcerns([
-        ...selectedConcerns.filter(concern => concern !== id),
+        ...selectedConcerns.filter((concern) => concern !== id),
       ]);
     } else {
       setSelectedConcerns([...selectedConcerns, id]);
@@ -145,7 +159,7 @@ const HomeScreen = props => {
             </Text>
             <BrickList
               data={preferences}
-              renderItem={prop => {
+              renderItem={(prop) => {
                 return (
                   <TouchableOpacity
                     onPress={() => handleConcernSelection(prop.id)}>
@@ -162,7 +176,8 @@ const HomeScreen = props => {
                 );
               }}
               columns={3}
-              rowHeight={45}></BrickList>
+              rowHeight={45}
+            />
             <Button
               buttonStyle={styles.done_button}
               raised={true}
@@ -170,9 +185,10 @@ const HomeScreen = props => {
               title="Done"
               titleStyle={styles.done}
               onPress={() => {
-                props.updateConcerns(selectedConcerns, props.auth.user._id);
+                props.updateConcerns(selectedConcerns, 0);
                 setModalVisible(false);
-              }}></Button>
+              }}
+            />
           </View>
         </View>
       </Modal>
@@ -180,7 +196,7 @@ const HomeScreen = props => {
         <View style={styles.header}>
           <View>
             <Text style={styles.helloText}>Hello !</Text>
-            <Text style={styles.nameText}>{props.auth.profile.name}</Text>
+            <Text style={styles.nameText}>{props.auth.user.name}</Text>
           </View>
           <TouchableOpacity
             onPress={() => {
@@ -201,7 +217,7 @@ const HomeScreen = props => {
               style={{width: 180, height: 180}}
             />
           </View>
-          <View></View>
+          <View />
           <View style={styles.botContent}>
             <Text
               style={{
@@ -215,7 +231,7 @@ const HomeScreen = props => {
             <TouchableOpacity
               onPress={() => {
                 props.navigation.navigate('Chat', {
-                  name: 'Eva Gupta',
+                  name: props.auth.user.name,
                 });
               }}>
               <View style={styles.button}>
@@ -248,9 +264,7 @@ const HomeScreen = props => {
         <View style={styles.quoteContainer}>
           <Text style={styles.quoteText}>Quote of the day</Text>
           <View style={styles.quote}>
-            <Text style={{fontSize: 17}}>
-              Be yourself no matter what they say!
-            </Text>
+            <Text style={{fontSize: 17}}>{quoteOfTheDay}</Text>
           </View>
         </View>
         <View>
@@ -260,7 +274,7 @@ const HomeScreen = props => {
               renderItem={renderItem}
               data={playlist}
               horizontal={true}
-              keyExtractor={item => item.id}
+              keyExtractor={(item) => item.id}
             />
           </View>
         </View>
@@ -269,7 +283,7 @@ const HomeScreen = props => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   auth: state.auth,
   quote: state.quote,
 });

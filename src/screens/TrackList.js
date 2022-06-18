@@ -36,7 +36,7 @@ const TrackList = props => {
       });
     });
     console.log(props.route.params.title);
-  }, [props.route.params.id]);
+  }, [props.route.params.id, props.route.params.title]);
   return (
     <ScrollView>
       <View style={styles.container}>

@@ -63,3 +63,4 @@ Happy Birds aims to be a **‘one-stop-shop’** app for mental health. From **m
 - Add specialists module
 - Add video calling functionality.
 - Add a booking appointment through the app and send a report of your profile along with your appointment request.
+# MentalHealth

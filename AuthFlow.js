@@ -3,11 +3,12 @@ import { useSelector } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import TabNavigation from './src/components/TabNavigation';
 import LoginStackNavigation from './src/components/LoginStackNavigation';
+import { isLoggedIn } from './src/redux/reducers/auth';
 
 const AuthFlow = () => {
   const auth = useSelector(state => state.auth);
   useEffect(() => {
-    console.log(auth);
+    console.log('authentication', auth);
   });
   return (
     <NavigationContainer>
