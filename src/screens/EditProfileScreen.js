@@ -22,26 +22,32 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {concerns} from '../constants/concerns';
-import {updateUser} from '../redux/actions/profile';
+import {updateUser, updateUserData} from '../redux/actions/profile';
 import {connect} from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import {getLoggedInUser} from '../redux/reducers/auth';
 
-const Profile = props => {
-  const [checked, setChecked] = useState(props.auth.profile.gender);
-  const [selectedConcerns, setSelectedConcerns] = useState(
-    props.auth.profile.concerns,
-  );
-  const [fullname, setFullname] = useState(props.auth.profile.name);
-  const [email, setEmail] = useState(props.auth.user.email);
-  const [phone, setPhone] = useState(props.auth.profile.phone_no);
-  const [age, setAge] = useState(props.auth.profile.age);
+const Profile = (props) => {
   const navigation = useNavigation();
+  const loggedInUser = useSelector(getLoggedInUser);
+  const [selectedConcerns, setSelectedConcerns] = useState(
+    loggedInUser.concerns,
+  );
+  console.log('edit selected concerns', selectedConcerns);
+  const [fullname, setFullname] = useState(loggedInUser.name);
+  const [email, setEmail] = useState(loggedInUser.email);
+  const [phone, setPhone] = useState(loggedInUser.phone);
+  const [age, setAge] = useState(loggedInUser.age);
+  const [gender, setGender] = useState(loggedInUser.gender);
+  const [checked, setChecked] = useState(loggedInUser.gender);
 
+  const dispatch = useDispatch();
+  console.log('');
   const hasErrors = () => {
     return !email.includes('@');
   };
 
-  const Gender = props => {
+  const Gender = (props) => {
     return (
       <RadioButton
         value={props}
@@ -52,20 +58,20 @@ const Profile = props => {
     );
   };
 
-  const Problem = prob => {
+  const Problem = (props) => {
     return (
       <View style={styles.checkbox}>
-        <Text style={{width: '57%'}}>{prob.name}</Text>
+        <Text style={{width: '57%'}}>{props.name}</Text>
         <Checkbox
           color={colors.primary}
-          status={selectedConcerns.includes(prob.id) ? 'checked' : 'unchecked'}
+          status={selectedConcerns.includes(props.id) ? 'checked' : 'unchecked'}
           onPress={() => {
-            if (selectedConcerns.includes(prob.id)) {
+            if (selectedConcerns.includes(props.id)) {
               setSelectedConcerns([
-                ...selectedConcerns.filter(concern => concern !== prob.id),
+                ...selectedConcerns.filter((concern) => concern !== props.id),
               ]);
             } else {
-              setSelectedConcerns([...selectedConcerns, prob.id]);
+              setSelectedConcerns([...selectedConcerns, props.id]);
             }
           }}
         />
@@ -74,15 +80,15 @@ const Profile = props => {
   };
 
   const submitHandler = () => {
-    props.updateUser(
-      fullname,
+    const user = {
+      name: fullname,
       email,
       phone,
       age,
-      checked,
-      selectedConcerns,
-      props.auth.user._id,
-    );
+      gender,
+      concerns: selectedConcerns,
+    };
+    dispatch(updateUserData(user));
     navigation.goBack();
   };
 
@@ -100,7 +106,11 @@ const Profile = props => {
         <View style={styles.dpCover}>
           <Image
             style={{width: 90, height: 90}}
-            source={require('../../assets/userIcon.png')}
+            source={
+              loggedInUser.gender === 'male'
+                ? require('../assets/maleUserIcon.png')
+                : require('../assets/femaleUserIcon.png')
+            }
           />
         </View>
         <Entypo
@@ -127,7 +137,7 @@ const Profile = props => {
             dense={true}
             label="Fullname"
             value={fullname}
-            onChangeText={text => setFullname(text)}
+            onChangeText={(text) => setFullname(text)}
           />
         </View>
 
@@ -147,7 +157,7 @@ const Profile = props => {
             dense={true}
             label="Email"
             value={email}
-            onChangeText={text => setEmail(text)}
+            onChangeText={(text) => setEmail(text)}
           />
         </View>
         {/* <HelperText type="error" visible={hasErrors()}>
@@ -190,7 +200,7 @@ const Profile = props => {
             dense={true}
             label="Phone no."
             value={phone}
-            onChangeText={text => setPhone(text)}
+            onChangeText={(text) => setPhone(text)}
             keyboardType="numeric"
           />
           <MaterialCommunityIcons
@@ -212,14 +222,14 @@ const Profile = props => {
             dense={true}
             label="Age"
             value={age}
-            onChangeText={text => setAge(text)}
+            onChangeText={(text) => setAge(text)}
             keyboardType="numeric"
           />
         </View>
         <View>
           <Text style={styles.problemText}>My Concerns: </Text>
           <View style={styles.problemsBox}>
-            {concerns.map(prob => {
+            {concerns.map((prob) => {
               return (
                 <View key={prob.id} style={styles.problemsPart}>
                   {Problem(prob)}
@@ -247,7 +257,7 @@ const Profile = props => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 

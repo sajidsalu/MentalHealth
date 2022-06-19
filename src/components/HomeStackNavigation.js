@@ -30,7 +30,7 @@ const HomeStackNavigator = () => {
       <Stack.Screen
         name="EditProfile"
         component={EditProfileScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false, unmountOnBlur: 'true'}}
       />
       <Stack.Screen
         name="Chat"

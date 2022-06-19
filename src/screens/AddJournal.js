@@ -1,5 +1,6 @@
 import {useRoute, useNavigation} from '@react-navigation/native';
 import React, {useRef, useState} from 'react';
+import {ToastAndroid} from 'react-native';
 import {
   StyleSheet,
   Text,
@@ -14,7 +15,10 @@ import {
   RichToolbar,
 } from 'react-native-pell-rich-editor';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {useDispatch} from 'react-redux';
 import {colors} from '../constants/theme';
+import {addJournal} from '../redux/actions/journals';
+import {getTime, getTodaysDate} from '../utils/date-utils';
 
 const AddStory = () => {
   const strikethrough = require('../../assets/strikethrough.png'); //icon for strikethrough
@@ -23,6 +27,7 @@ const AddStory = () => {
   const [article, setArticle] = useState('');
   const route = useRoute();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   function onPressAddImage() {
     // you can easily add images from your gallery
@@ -38,6 +43,27 @@ const AddStory = () => {
     );
   }
 
+  const onDonePressed = () => {
+    if (article == '') {
+      ToastAndroid.show('Please enter journal entry', ToastAndroid.SHORT);
+    } else {
+      try {
+        const journalId = Math.floor(Math.random() * 1000 + 1);
+        const journal = {
+          id: journalId,
+          content: article,
+          time: getTime(),
+          date: getTodaysDate(),
+        };
+        dispatch(addJournal(journal));
+        ToastAndroid.show('Journal saved', ToastAndroid.SHORT);
+        navigation.navigate('JournalScreen');
+      } catch (e) {
+        console.log('blog error', e);
+        ToastAndroid.show('Save failed', ToastAndroid.SHORT);
+      }
+    }
+  };
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -48,7 +74,7 @@ const AddStory = () => {
           style={styles.rich}
           placeholder="Start Writing Here!"
           //initialContentHTML={data.content}
-          //  onChange={(text) => setArticle(text)}
+          onChange={(text) => setArticle(text)}
         />
         <RichToolbar
           style={[styles.richBar]}
@@ -60,7 +86,6 @@ const AddStory = () => {
           onPressAddImage={onPressAddImage}
           iconSize={40}
           actions={[
-            'insertVideo',
             ...defaultActions,
             actions.setStrikethrough,
             actions.heading1,
@@ -89,8 +114,7 @@ const AddStory = () => {
             backgroundColor: colors.yellow,
           }}
           onPress={() => {
-            console.log('done pressed');
-            navigation.navigate('JournalScreen');
+            onDonePressed();
           }}>
           <Text style={[styles.text]}>
             <Entypo name="check" size={20} color="black" /> Done

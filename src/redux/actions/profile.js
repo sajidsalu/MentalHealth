@@ -1,4 +1,4 @@
-import {CONCERN_UPDATE, UPDATE_USER} from './type';
+import {CONCERN_UPDATE, UPDATE_USER, UPDATE_USER_DATA} from './type';
 import axios from 'axios';
 import {ToastAndroid} from 'react-native';
 import {api_route} from '../../utils/route';
@@ -66,3 +66,17 @@ export const updateUser = (
     ToastAndroid.show('Something went wrong!', ToastAndroid.SHORT);
   }
 };
+
+export function updateUserConcerns(userConcerns) {
+  return {
+    type: CONCERN_UPDATE,
+    payload: userConcerns,
+  };
+}
+
+export function updateUserData(user) {
+  return {
+    type: UPDATE_USER_DATA,
+    payload: user,
+  };
+}

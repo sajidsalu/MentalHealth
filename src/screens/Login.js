@@ -12,15 +12,19 @@ import {
   ToastAndroid,
 } from 'react-native';
 import {colors} from '../constants/theme';
-import {connect} from 'react-redux';
-import {login} from '../redux/actions/auth';
+import {connect, useDispatch, useSelector} from 'react-redux';
+import {login, loginUser} from '../redux/actions/auth';
+import {getUserData} from '../redux/reducers/auth';
+import {find} from 'lodash';
 
 const Login = (props) => {
+  const dispatch = useDispatch();
   const [state, setState] = useState({
     email: '',
     password: '',
   });
-
+  const userData = useSelector(getUserData);
+  console.log('userData is ', userData);
   const handleLogin = () => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -36,10 +40,19 @@ const Login = (props) => {
       );
       return;
     }
+    const user = find(userData, function (user) {
+      return user.email === state.email && user.password === state.password;
+    });
 
-    props.login({...state});
-
-    //console.log('after-register');
+    if (user === undefined) {
+      ToastAndroid.show(
+        'Email or Password is incorrect. Please try again',
+        ToastAndroid.SHORT,
+      );
+      return;
+    } else {
+      dispatch(loginUser(user));
+    }
   };
 
   return (

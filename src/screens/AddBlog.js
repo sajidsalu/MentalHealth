@@ -1,10 +1,13 @@
+import { useNavigation } from '@react-navigation/native';
 import React, {useRef, useState} from 'react';
+import {ToastAndroid} from 'react-native';
 import {
   StyleSheet,
   Text,
   ScrollView,
   TouchableOpacity,
   View,
+  TextInput,
 } from 'react-native';
 import {
   actions,
@@ -13,15 +16,24 @@ import {
   RichToolbar,
 } from 'react-native-pell-rich-editor';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {useDispatch, useSelector} from 'react-redux';
 import {colors} from '../constants/theme';
+import {saveBlog} from '../redux/actions/blog';
+import {getLoggedInUser} from '../redux/reducers/auth';
 
-const AddStory = props => {
+const AddStory = (props) => {
   const strikethrough = require('../../assets/strikethrough.png'); //icon for strikethrough
-  const video = require('../../assets/video.png'); //icon for Addvideo
+  const video = require('../assets/video.png'); //icon for Addvideo
+  const image = require('../assets/camera.png'); //icon for Addvideo
   const RichText = useRef(); //reference to the RichEditor component
   const [article, setArticle] = useState('');
+  const [title, setArticleTitle] = useState('');
+  const loggedInUser = useSelector(getLoggedInUser);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
 
-  function onPressAddImage() {
+  function onPressAddImage(imageUrl) {
+    console.log('image', imageUrl);
     // you can easily add images from your gallery
     RichText.current.insertImage(
       'https://img1.thelist.com/img/gallery/ways-to-tell-if-youre-really-happy/intro-1494540038.jpg',
@@ -35,6 +47,34 @@ const AddStory = props => {
     );
   }
 
+  const onDonePressed = () => {
+    if (article === '') {
+      ToastAndroid.show('Please enter blog data', ToastAndroid.SHORT);
+    } else if (title === '') {
+      ToastAndroid.show('Please enter blog title', ToastAndroid.SHORT);
+    } else {
+      try {
+        const blogId = Math.floor(Math.random() * 1000 + 1);
+        const journal = {
+          blogId,
+          title,
+          article,
+          author: loggedInUser.name,
+          likes: 0,
+          image:
+            'https://img1.thelist.com/img/gallery/ways-to-tell-if-youre-really-happy/intro-1494540038.jpg',
+        };
+
+        dispatch(saveBlog(journal));
+        ToastAndroid.show('Blog saved', ToastAndroid.SHORT);
+        navigation.navigate('MainScreen');
+      } catch (e) {
+        console.log('blog error', e);
+        ToastAndroid.show('Save failed', ToastAndroid.SHORT);
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={{height: 30}}>
@@ -42,7 +82,15 @@ const AddStory = props => {
           Back
         </Text>
       </View>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{padding: 10}}>
+        <Text>Title</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => {
+            setArticleTitle(text);
+          }}
+          value={title}
+        />
         <RichEditor
           disabled={false}
           containerStyle={styles.editor}
@@ -50,7 +98,9 @@ const AddStory = props => {
           style={styles.rich}
           placeholder="Start Writing Here!"
           //initialContentHTML={data.content}
-          //  onChange={(text) => setArticle(text)}
+          onChange={(text) => {
+            setArticle(text);
+          }}
         />
         <RichToolbar
           style={[styles.richBar]}
@@ -60,9 +110,8 @@ const AddStory = props => {
           selectedIconTint={colors.yellow}
           disabledIconTint={colors.secondary}
           onPressAddImage={onPressAddImage}
-          iconSize={40}
+          iconSize={45}
           actions={[
-            'insertVideo',
             ...defaultActions,
             actions.setStrikethrough,
             actions.heading1,
@@ -73,7 +122,6 @@ const AddStory = props => {
               <Text style={[styles.tib, {color: tintColor}]}>H1</Text>
             ),
             [actions.setStrikethrough]: strikethrough,
-            ['insertVideo']: video,
           }}
           insertVideo={insertVideo}
         />
@@ -90,7 +138,7 @@ const AddStory = props => {
             marginBottom: 10,
             backgroundColor: colors.yellow,
           }}
-          onPress={() => console.log('i m pressed')}>
+          onPress={() => onDonePressed()}>
           <Text style={[styles.text]}>
             <Entypo name="check" size={20} color="black" /> Done
           </Text>
@@ -143,5 +191,13 @@ const styles = StyleSheet.create({
   tib: {
     textAlign: 'center',
     color: '#515156',
+  },
+  input: {
+    height: 40,
+    marginBottom: 12,
+    padding: 10,
+    backgroundColor: colors.white,
+    borderColor: colors.accent,
+    borderWidth: 0.8,
   },
 });

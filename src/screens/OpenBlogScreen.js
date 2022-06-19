@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 
-const OpenBlogScreen = props => {
+const OpenBlogScreen = (props) => {
   const {width, height} = Dimensions.get('window');
 
   const {data} = props.route.params;
-
+  const regex = /(<([^>]+)>)/gi;
   return (
     <View style={styles.container}>
       <View>
@@ -66,27 +66,8 @@ const OpenBlogScreen = props => {
             {data.title}
           </Text>
         </View>
-
         <Text style={styles.text}>
-          There was a time I wanted to change the world. I tried to change the
-          tech industry. Now I just want to change my thinking. I have struggled
-          with depression on and off since 2011 that I’m aware of. My peak
-          depression level came early 2013 after moving from Raleigh, NC to San
-          Francisco. The move didn’t cause my depression, but the lack of
-          self-awareness that I was even depressed almost killed me. As an
-          entrepreneur, one of the most successful behaviors you can develop is
-          the skill of self-awareness. Learn what it means to know what you
-          don’t know and how you are feeling. Learn the ability to process your
-          emotional state of being.
-        </Text>
-
-        <Text style={styles.text}>
-          I didn’t have that skill in 2011; I wasn’t processing my emotions, how
-          I was feeling and even worse, how I was making others feel around me.
-          I wasn’t processing how my behavior was affecting my confidence.
-          Confidence is everything. I know this. But understanding you need to
-          work on your confidence and being confident is another. Projecting
-          your confidence in your work can lead to peak success.
+          {data.article && data.article.toString().replace(regex, '')}
         </Text>
 
         <View style={styles.like}>

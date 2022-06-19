@@ -1,16 +1,17 @@
-import {REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS} from './type';
+import {
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
+  LOGIN_SUCCESS,
+  LOGOUT_USER,
+} from './type';
 import axios from 'axios';
 import {api_route} from '../../utils/route';
 import {ToastAndroid} from 'react-native';
 import {fetchQuoteOfTheDay} from './quote';
+import {useDispatch} from 'react-redux';
 
-export const register = ({
-  name,
-  email,
-  password,
-  gender,
-  age,
-}) => async dispatch => {
+export const register = ({name, email, password, gender, age}) => async () => {
+  const dispatch = useDispatch();
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -24,13 +25,14 @@ export const register = ({
   // console.log(body);
   try {
     //const res = await axios.post(`${api_route}/api/user`, body, config);
-    dispatch({type: REGISTER_SUCCESS, payload: user});
+    await dispatch({type: REGISTER_SUCCESS, payload: user});
   } catch (err) {
+    console.log('error while registering');
     ToastAndroid.show(err.response.data.errors[0].msg, ToastAndroid.SHORT);
   }
 };
 
-export const login = ({email, password}) => async dispatch => {
+export const login = ({email, password}) => async (dispatch) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -47,3 +49,35 @@ export const login = ({email, password}) => async dispatch => {
     ToastAndroid.show(err.response.data.errors[0].msg, ToastAndroid.SHORT);
   }
 };
+
+export function registerUser({name, email, password, gender, age}) {
+  const user = {name, email, password, age, gender};
+  console.log('user details to signup', user);
+  return {
+    type: REGISTER_SUCCESS,
+    payload: user,
+  };
+}
+
+export function loginUser({
+  name,
+  email,
+  password,
+  gender,
+  age,
+  concerns,
+  phone,
+}) {
+  const user = {name, email, password, gender, age, concerns, phone};
+  return {
+    type: LOGIN_SUCCESS,
+    payload: user,
+  };
+}
+
+export function logoutUser() {
+  return {
+    type: LOGOUT_USER,
+    payload: {},
+  };
+}

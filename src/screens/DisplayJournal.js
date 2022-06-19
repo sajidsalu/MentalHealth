@@ -15,14 +15,38 @@ import {
 } from 'react-native-pell-rich-editor';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {colors} from '../constants/theme';
+import {getTime, getTodaysDate} from '../utils/date-utils';
+import {useDispatch} from 'react-redux';
+import {addJournal, updateJournal} from '../redux/actions/journals';
+import {ToastAndroid} from 'react-native';
 
-const AddStory = props => {
+const AddStory = (props) => {
   const strikethrough = require('../../assets/strikethrough.png'); //icon for strikethrough
   const video = require('../../assets/video.png'); //icon for Addvideo
   const RichText = useRef(); //reference to the RichEditor component
   const [article, setArticle] = useState('');
   const {data} = props.route.params;
+  console.log(' data is', data);
   const navigation = useNavigation();
+  const regex = /(<([^>]+)>)/gi;
+  const dispatch = useDispatch();
+
+  const onDonePressed = () => {
+    try {
+      const journal = {
+        id: data.id,
+        content: article,
+        time: getTime(),
+        date: getTodaysDate(),
+      };
+      dispatch(updateJournal(journal));
+      ToastAndroid.show('Journal saved', ToastAndroid.SHORT);
+      navigation.navigate('JournalScreen');
+    } catch (e) {
+      console.log('blog error', e);
+      ToastAndroid.show('Save failed', ToastAndroid.SHORT);
+    }
+  };
 
   function onPressAddImage() {
     // you can easily add images from your gallery
@@ -47,7 +71,7 @@ const AddStory = props => {
           ref={RichText}
           style={styles.rich}
           initialContentHTML={data.content}
-          onChange={text => setArticle(text)}
+          onChange={(text) => setArticle(text)}
         />
         <RichToolbar
           style={[styles.richBar]}
@@ -59,7 +83,6 @@ const AddStory = props => {
           onPressAddImage={onPressAddImage}
           iconSize={40}
           actions={[
-            'insertVideo',
             ...defaultActions,
             actions.setStrikethrough,
             actions.heading1,
@@ -70,7 +93,6 @@ const AddStory = props => {
               <Text style={[styles.tib, {color: tintColor}]}>H1</Text>
             ),
             [actions.setStrikethrough]: strikethrough,
-            ['insertVideo']: video,
           }}
           insertVideo={insertVideo}
         />
@@ -87,10 +109,8 @@ const AddStory = props => {
             marginBottom: 10,
             backgroundColor: colors.yellow,
           }}
-          onPress={() =>{
-
-            console.log('done pressed');
-            navigation.navigate('JournalScreen');
+          onPress={() => {
+            onDonePressed();
           }}>
           <Text style={[styles.text]}>
             <Entypo name="check" size={20} color="black" /> Done

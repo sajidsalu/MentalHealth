@@ -21,10 +21,13 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {FAB} from 'react-native-paper';
 import AddBlog from './AddBlog';
+import {useSelector} from 'react-redux';
+import {getBlogs} from '../redux/reducers/blog';
 
 const MainScreen = ({navigation}) => {
   const {width, height} = Dimensions.get('window');
-
+  const popularBlogs = useSelector(getBlogs);
+  console.log('blogs are', JSON.stringify(popularBlogs));
   return (
     <View style={styles.container}>
       <View style={styles.YourDailyRead}>
@@ -44,7 +47,7 @@ const MainScreen = ({navigation}) => {
           showsHorizontalScrollIndicator={false}
           horizontal
           data={data}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={(item) => item.id.toString()}
           style={{paddingHorizontal: 20}}
           renderItem={({item}) => {
             return (
@@ -138,8 +141,8 @@ const MainScreen = ({navigation}) => {
       </View>
 
       <FlatList
-        data={popular}
-        keyExtractor={item => item.id.toString()}
+        data={popularBlogs}
+        keyExtractor={(item) => item.id}
         renderItem={({item}) => {
           return (
             <View>
@@ -160,7 +163,7 @@ const MainScreen = ({navigation}) => {
                   </View>
 
                   <View style={{width: '60%', marginTop: -10}}>
-                    <Text></Text>
+                    <Text />
                     <Text
                       style={{
                         fontSize: 15,

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Image,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import {Chip} from 'react-native-paper';
 //import { AntDesign,MaterialIcons,Feather,FontAwesome5,MaterialCommunityIcons,Ionicons} from '@expo/vector-icons';
@@ -16,54 +17,79 @@ import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {colors, sizes, fonts} from '../constants/theme';
+import {colors, fonts} from '../constants/theme';
 import {concerns} from '../constants/concerns';
 import pastData from '../constants/pastData';
 import futureData from '../constants/futureData';
 import Appointments from '../components/Appointments';
-import {connect} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
+import {getLoggedInUser} from '../redux/reducers/auth';
+import {logoutUser} from '../redux/actions/auth';
 
 const ProfileScreen = (props) => {
-  // const user=useSelector((state)=>state.user)
-  console.log('conerens in redux store is', props.auth.profile.concerns);
+  const loggedInUser = useSelector(getLoggedInUser);
   const [selectedConcerns, setSelectedConcerns] = useState(
-    props.auth.profile.concerns,
+    loggedInUser.concerns,
   );
-
+  console.log('selected concerns', selectedConcerns);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    console.log('data changed', loggedInUser.concerns);
+    setSelectedConcerns(loggedInUser.concerns);
+  }, [loggedInUser]);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.background}>
         <View style={styles.top}>
           <AntDesign
+            style={{flex: 1}}
             name="arrowleft"
             size={32}
             color={colors.white}
             onPress={() => props.navigation.navigate('Home')}
           />
           <Text style={styles.profileText}>Profile</Text>
-          <FontAwesome5
-            name="edit"
-            size={24}
-            color={colors.white}
-            onPress={() => props.navigation.navigate('EditProfile')}
-          />
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <FontAwesome5
+              name="edit"
+              size={24}
+              color={colors.white}
+              onPress={() => props.navigation.navigate('EditProfile')}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                console.log('logout');
+                dispatch(logoutUser());
+              }}>
+              <MaterialIcons name="logout" size={24} color={colors.black} />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.dpCover}>
           <Image
             style={{width: 100, height: 100}}
-            source={require('../../assets/userIcon.png')}
+            source={
+              loggedInUser.gender === 'male'
+                ? require('../assets/maleUserIcon.png')
+                : require('../assets/femaleUserIcon.png')
+            }
           />
         </View>
       </View>
       <View style={styles.info}>
-        <Text style={styles.name}>{props.auth.profile.name}</Text>
+        <Text style={styles.name}>{loggedInUser.name}</Text>
         <View style={styles.infoBox}>
           <MaterialCommunityIcons
             name="gender-male-female"
             size={20}
             color={colors.tertiary}
           />
-          <Text style={styles.otherInfo}>{props.auth.user.gender}</Text>
+          <Text style={styles.otherInfo}>{loggedInUser.gender}</Text>
         </View>
         <View style={styles.infoBox}>
           <MaterialCommunityIcons
@@ -71,11 +97,11 @@ const ProfileScreen = (props) => {
             size={20}
             color={colors.tertiary}
           />
-          <Text style={styles.otherInfo}>{props.auth.user.age} yrs. old</Text>
+          <Text style={styles.otherInfo}>{loggedInUser.age} yrs. old</Text>
         </View>
         <View style={styles.infoBox}>
           <Feather name="phone" size={20} color={colors.tertiary} />
-          <Text style={styles.otherInfo}>{props.auth.user.phone_no}</Text>
+          <Text style={styles.otherInfo}>{loggedInUser.phone}</Text>
         </View>
         <View style={styles.infoBox}>
           <MaterialCommunityIcons
@@ -83,7 +109,7 @@ const ProfileScreen = (props) => {
             size={20}
             color={colors.tertiary}
           />
-          <Text style={styles.otherInfo}>{props.auth.user.email}</Text>
+          <Text style={styles.otherInfo}>{loggedInUser.email}</Text>
         </View>
       </View>
       <View style={styles.concernContainer}>
@@ -143,10 +169,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   profileText: {
+    flex: 2,
     position: 'relative',
     color: colors.white,
     fontSize: fonts.h1.fontSize,
     fontWeight: '700',
+    textAlign: 'center',
   },
   dpCover: {
     width: 110,

@@ -20,13 +20,16 @@ import {ScrollView} from 'react-native-gesture-handler';
 import AddJournal from './AddJournal';
 import {FAB} from 'react-native-paper';
 import DisplayJournal from './DisplayJournal';
+import {useSelector} from 'react-redux';
+import {getJournals} from '../redux/reducers/journals';
 
 const JournalScreen = ({navigation}) => {
   const {width, height} = Dimensions.get('window');
-
   var date = new Date().getDate();
   var month = new Date().getMonth() + 1;
   var year = new Date().getFullYear();
+  const journals = useSelector(getJournals);
+  const regex = /(<([^>]+)>)/gi;
   const monthArray = [
     'January',
     'February',
@@ -60,8 +63,9 @@ const JournalScreen = ({navigation}) => {
       </View>
 
       <FlatList
-        data={data}
-        keyExtractor={item => item.id.toString()}
+        data={journals}
+        keyExtractor={(item) => item.id}
+        inverted={true}
         renderItem={({item}) => {
           return (
             <View>
@@ -85,7 +89,8 @@ const JournalScreen = ({navigation}) => {
                       <Text style={styles.timestyle}>{item.time}</Text>
                     </View>
                     <Text style={styles.contentstyle} numberOfLines={2}>
-                      {item.content}
+                      {item.content &&
+                        item.content.toString().replace(regex, '')}
                     </Text>
                   </View>
                 </View>

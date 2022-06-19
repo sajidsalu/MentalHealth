@@ -16,10 +16,11 @@ import {Button} from 'react-native-elements';
 import BrickList from 'react-native-masonry-brick-list';
 import axios from 'axios';
 import base64 from 'react-native-base64';
-import {connect} from 'react-redux';
-import {updateConcerns} from '../redux/actions/profile';
+import {connect, useDispatch, useSelector} from 'react-redux';
+import {updateConcerns, updateUserConcerns} from '../redux/actions/profile';
 import {fetchQuoteOfTheDay} from '../redux/actions/quote';
 import {Avatar, Card, Title, Paragraph} from 'react-native-paper';
+import {getLoggedInUser} from '../redux/reducers/auth';
 
 const preferences = [
   {
@@ -57,10 +58,19 @@ const preferences = [
 ];
 
 const HomeScreen = (props) => {
-  const [modalVisible, setModalVisible] = useState(true);
+  const loggedInUser = useSelector(getLoggedInUser);
+  console.log('logged in user is', loggedInUser, loggedInUser.name);
+  const [modalVisible, setModalVisible] = useState(() => {
+    if (loggedInUser.concerns) {
+      return false;
+    } else {
+      return true;
+    }
+  });
   const [playlist, setPlaylist] = useState([]);
   const [selectedConcerns, setSelectedConcerns] = useState([]);
   const [quoteOfTheDay, setQuote] = useState('');
+  const dispatch = useDispatch();
   useEffect(() => {
     fetchQuoteOfTheDay();
   }, []);
@@ -185,7 +195,7 @@ const HomeScreen = (props) => {
               title="Done"
               titleStyle={styles.done}
               onPress={() => {
-                props.updateConcerns(selectedConcerns, 0);
+                dispatch(updateUserConcerns(selectedConcerns));
                 setModalVisible(false);
               }}
             />
@@ -196,7 +206,7 @@ const HomeScreen = (props) => {
         <View style={styles.header}>
           <View>
             <Text style={styles.helloText}>Hello !</Text>
-            <Text style={styles.nameText}>{props.auth.user.name}</Text>
+            <Text style={styles.nameText}>{loggedInUser.name}</Text>
           </View>
           <TouchableOpacity
             onPress={() => {
@@ -204,8 +214,12 @@ const HomeScreen = (props) => {
             }}>
             <View style={styles.avatar}>
               <Image
-                source={require('../../assets/avatar.png')}
                 style={{width: 60, height: 60}}
+                source={
+                  loggedInUser.gender === 'male'
+                    ? require('../assets/maleUserIcon.png')
+                    : require('../assets/femaleUserIcon.png')
+                }
               />
             </View>
           </TouchableOpacity>

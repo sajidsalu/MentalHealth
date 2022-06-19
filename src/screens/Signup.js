@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,16 +13,16 @@ import {
   SafeAreaView,
   Keyboard,
   ScrollView,
-  ToastAndroid
+  ToastAndroid,
 } from 'react-native';
-import { colors } from '../constants/theme';
-import { RadioButton } from 'react-native-paper';
-import { register } from '../redux/actions/auth';
-import { useDispatch } from 'react-redux';
-import { connect } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import {colors} from '../constants/theme';
+import {RadioButton} from 'react-native-paper';
+import {register, registerUser} from '../redux/actions/auth';
+import {useDispatch} from 'react-redux';
+import {connect} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 
-const Signup = props => {
+const Signup = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [state, setState] = useState({
@@ -31,10 +31,10 @@ const Signup = props => {
     age: null,
     gender: '',
     password: '',
-    password2: ''
+    password2: '',
   });
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (state.fullName === '') {
       ToastAndroid.show('Full Name is required', ToastAndroid.SHORT);
       return;
@@ -65,7 +65,7 @@ const Signup = props => {
     if (state.password.length < 6) {
       ToastAndroid.show(
         'Password must contain 6 characters',
-        ToastAndroid.SHORT
+        ToastAndroid.SHORT,
       );
       return;
     }
@@ -76,20 +76,21 @@ const Signup = props => {
     }
     console.log('before-register');
 
-    props.register({ name: state.fullName, ...state });
+    dispatch(registerUser({name: state.fullName, ...state}));
+    //await props.register({name: state.fullName, ...state});
     navigation.navigate('Login');
 
     //console.log('after-register');
   };
   return (
-    <ScrollView style={{ backgroundColor: colors.white }}>
+    <ScrollView style={{backgroundColor: colors.white}}>
       <View style={styles.container}>
         <View>
           <Image
             source={require('../../assets/yoga_main.jpg')}
             style={{
               width: Dimensions.get('screen').width,
-              height: 160
+              height: 160,
             }}
           />
         </View>
@@ -99,10 +100,10 @@ const Signup = props => {
             style={styles.textInput}
             placeholder={'Full Name'}
             value={state.fullName}
-            onChangeText={text =>
+            onChangeText={(text) =>
               setState({
                 ...state,
-                fullName: text
+                fullName: text,
               })
             }
           />
@@ -110,64 +111,64 @@ const Signup = props => {
             style={styles.textInput}
             placeholder={'Email'}
             value={state.email}
-            onChangeText={text => {
+            onChangeText={(text) => {
               setState({
                 ...state,
-                email: text
+                email: text,
               });
             }}
           />
           <TextInput
             style={styles.textInput}
             placeholder={'Age'}
-            keyboardType='numeric'
+            keyboardType="numeric"
             value={state.age}
-            onChangeText={text => {
+            onChangeText={(text) => {
               setState({
                 ...state,
-                age: text
+                age: text,
               });
             }}
           />
           <View style={styles.radioButton}>
             <View style={styles.radio}>
-              <Text style={{ color: colors.secondary }}>Male</Text>
+              <Text style={{color: colors.secondary}}>Male</Text>
               <RadioButton
-                value='male'
+                value="male"
                 color={colors.secondary}
                 status={state.gender === 'male' ? 'checked' : 'unchecked'}
                 onPress={() => {
                   setState({
                     ...state,
-                    gender: 'male'
+                    gender: 'male',
                   });
                 }}
               />
             </View>
             <View style={styles.radio}>
-              <Text style={{ color: colors.secondary }}>Female</Text>
+              <Text style={{color: colors.secondary}}>Female</Text>
               <RadioButton
-                value='female'
+                value="female"
                 color={colors.secondary}
                 status={state.gender === 'female' ? 'checked' : 'unchecked'}
                 onPress={() => {
                   setState({
                     ...state,
-                    gender: 'female'
+                    gender: 'female',
                   });
                 }}
               />
             </View>
             <View style={styles.radio}>
-              <Text style={{ color: colors.secondary }}>Other</Text>
+              <Text style={{color: colors.secondary}}>Other</Text>
               <RadioButton
                 color={colors.secondary}
-                value='other'
+                value="other"
                 status={state.gender === 'other' ? 'checked' : 'unchecked'}
                 onPress={() => {
                   setState({
                     ...state,
-                    gender: 'other'
+                    gender: 'other',
                   });
                 }}
               />
@@ -177,10 +178,10 @@ const Signup = props => {
             style={styles.textInput}
             placeholder={'Password'}
             value={state.password}
-            onChangeText={text => {
+            onChangeText={(text) => {
               setState({
                 ...state,
-                password: text
+                password: text,
               });
             }}
             secureTextEntry={true}
@@ -189,10 +190,10 @@ const Signup = props => {
             style={styles.textInput}
             placeholder={'Confirm Password'}
             value={state.password2}
-            onChangeText={text => {
+            onChangeText={(text) => {
               setState({
                 ...state,
-                password2: text
+                password2: text,
               });
             }}
             secureTextEntry={true}
@@ -200,8 +201,7 @@ const Signup = props => {
           <TouchableOpacity
             onPress={() => {
               props.navigation.navigate('Login');
-            }}
-          >
+            }}>
             <Text style={styles.already}>Already have an account?</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -211,20 +211,19 @@ const Signup = props => {
             //     ToastAndroid.SHORT
             //   );
             // }}
-            onPress={handleSignUp}
-          >
+            onPress={handleSignUp}>
             <View style={styles.submitButton}>
               <Text style={styles.submitText}>Signup</Text>
             </View>
           </TouchableOpacity>
-          <View style={{ paddingBottom: Keyboard.height }}></View>
+          <View style={{paddingBottom: Keyboard.height}} />
         </View>
       </View>
     </ScrollView>
   );
 };
 
-export default connect(null, { register })(Signup);
+export default connect(null, {register})(Signup);
 
 const styles = StyleSheet.create({
   container: {
@@ -233,7 +232,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     position: 'relative',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   signUpContainer: {
     backgroundColor: colors.white,
@@ -244,7 +243,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 15,
     top: -20,
     zIndex: 200,
-    width: '100%'
+    width: '100%',
   },
   textInput: {
     backgroundColor: colors.accent,
@@ -253,16 +252,16 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     elevation: 1,
     padding: 10,
-    color: colors.black
+    color: colors.black,
   },
   radioButton: {
     flexDirection: 'row',
     paddingLeft: 20,
-    width: '100%'
+    width: '100%',
   },
   radio: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   submitButton: {
     alignSelf: 'center',
@@ -271,14 +270,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.yellow,
     height: 40,
-    borderRadius: 60
+    borderRadius: 60,
   },
   submitText: {
     color: colors.white,
     textTransform: 'uppercase',
     fontWeight: 'bold',
     fontSize: 15,
-    letterSpacing: 2
+    letterSpacing: 2,
   },
   headerText: {
     color: colors.secondary,
@@ -286,12 +285,12 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     padding: 10,
     alignSelf: 'center',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   already: {
     alignSelf: 'flex-end',
     paddingRight: 20,
     paddingBottom: 10,
-    color: colors.secondary
-  }
+    color: colors.secondary,
+  },
 });
