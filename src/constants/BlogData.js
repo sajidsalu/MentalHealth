@@ -1,6 +1,6 @@
 export const data = [
   {
-    id: 1,
+    id: '1',
     author: 'McKay Cooper',
     likes: 100,
     title: 'How Depression Made Me a Morning Person',
@@ -9,7 +9,7 @@ export const data = [
     image: 'https://miro.medium.com/max/788/1*bdezOVG_rWX8mXkVn62QOQ.jpeg',
   },
   {
-    id: 2,
+    id: '2',
     author: 'Mark Heider',
     title: 'What I Learned from Depression',
     likes: 220,
@@ -18,7 +18,7 @@ export const data = [
     image: 'https://miro.medium.com/max/788/1*n3bgDB8TG4kfyVbTzGcSWA.jpeg',
   },
   {
-    id: 3,
+    id: '3',
     author: 'David Gershon',
     title: '7 lessons I’ve learned from practicing yoga',
     likes: 620,
@@ -30,7 +30,7 @@ export const data = [
 
 export const popular = [
   {
-    id: 1,
+    id: '1',
     title: 'Mastering Depression and Living the Life You Were Meant to Live',
     likes: 620,
     image: 'https://miro.medium.com/max/2126/1*luCXoCDBjoqSHu7KqbfJiw.jpeg',
@@ -39,7 +39,7 @@ export const popular = [
     author: 'James Molly',
   },
   {
-    id: 2,
+    id: '2',
     title: 'A New Prime Suspect For Depression',
     likes: 421,
     image: 'https://miro.medium.com/max/788/1*8atjnMgv1YE7waQcX5HYaA.jpeg',
@@ -48,7 +48,7 @@ export const popular = [
     author: 'Thomas Greene',
   },
   {
-    id: 3,
+    id: '3',
     title: 'How I learned to stop worrying and love the stress',
     likes: 156,
     image: 'https://miro.medium.com/max/788/1*Nrm8MhT-REjApjavtK9Rgg.jpeg',

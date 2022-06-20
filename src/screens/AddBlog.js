@@ -56,7 +56,7 @@ const AddStory = (props) => {
       try {
         const blogId = Math.floor(Math.random() * 1000 + 1);
         const journal = {
-          blogId,
+          id: String(blogId),
           title,
           article,
           author: loggedInUser.name,

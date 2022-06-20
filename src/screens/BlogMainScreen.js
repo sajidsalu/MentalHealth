@@ -23,10 +23,16 @@ import {FAB} from 'react-native-paper';
 import AddBlog from './AddBlog';
 import {useSelector} from 'react-redux';
 import {getBlogs} from '../redux/reducers/blog';
+import { useEffect } from 'react';
 
 const MainScreen = ({navigation}) => {
   const {width, height} = Dimensions.get('window');
   const popularBlogs = useSelector(getBlogs);
+  const [blogs, setBlogs] = React.useState(popularBlogs);
+
+  useEffect(()=>{
+    setBlogs(popularBlogs);
+  },[popularBlogs]);
   console.log('blogs are', JSON.stringify(popularBlogs));
   return (
     <View style={styles.container}>
@@ -142,7 +148,7 @@ const MainScreen = ({navigation}) => {
 
       <FlatList
         data={popularBlogs}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({item}) => {
           return (
             <View>

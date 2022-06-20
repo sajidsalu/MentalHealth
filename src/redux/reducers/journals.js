@@ -17,9 +17,10 @@ export const getJournals = (state) => {
 };
 
 function journalsReducer(state = initialState, action) {
+  const currentJournals = state.journals;
   switch (action.type) {
     case ADD_JOURNALS: {
-      const journals = state.journals;
+      const journals = [...currentJournals];
       journals.push(action.payload);
       return {
         ...state,
@@ -30,7 +31,7 @@ function journalsReducer(state = initialState, action) {
       const updatedJournal = action.payload;
       return {
         ...state,
-        journals: state.journals.map((journal, i) =>
+        journals: currentJournals.map((journal, i) =>
           journal.id === updatedJournal.id
             ? {
                 ...state.journals,

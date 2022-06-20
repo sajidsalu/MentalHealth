@@ -21,6 +21,7 @@ import {updateConcerns, updateUserConcerns} from '../redux/actions/profile';
 import {fetchQuoteOfTheDay} from '../redux/actions/quote';
 import {Avatar, Card, Title, Paragraph} from 'react-native-paper';
 import {getLoggedInUser} from '../redux/reducers/auth';
+import { getBlogs } from '../redux/reducers/blog';
 
 const preferences = [
   {
@@ -59,6 +60,8 @@ const preferences = [
 
 const HomeScreen = (props) => {
   const loggedInUser = useSelector(getLoggedInUser);
+  const blogs = useSelector(getBlogs);
+  console.log('blogs are',blogs);
   console.log('logged in user is', loggedInUser, loggedInUser.name);
   const [modalVisible, setModalVisible] = useState(() => {
     if (loggedInUser.concerns) {
@@ -77,7 +80,7 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
     // console.log(selectedConcerns);
-    console.log('authenticated data', props.auth);
+    //console.log('authenticated data', props.auth);
   });
 
   useEffect(() => {
