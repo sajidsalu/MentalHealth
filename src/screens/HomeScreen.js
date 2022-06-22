@@ -19,9 +19,8 @@ import base64 from 'react-native-base64';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import {updateConcerns, updateUserConcerns} from '../redux/actions/profile';
 import {fetchQuoteOfTheDay} from '../redux/actions/quote';
-import {Avatar, Card, Title, Paragraph} from 'react-native-paper';
-import {getLoggedInUser} from '../redux/reducers/auth';
-import { getBlogs } from '../redux/reducers/blog';
+import {getLoggedInUser, isFirstTimeLogin} from '../redux/reducers/auth';
+import { useNavigation } from '@react-navigation/native';
 
 const preferences = [
   {
@@ -60,9 +59,14 @@ const preferences = [
 
 const HomeScreen = (props) => {
   const loggedInUser = useSelector(getLoggedInUser);
-  const blogs = useSelector(getBlogs);
-  console.log('blogs are',blogs);
+  const isFirstLogin = loggedInUser.isFirstTimeLogin;
+  const navigation = useNavigation();
+
+  console.log('isFirstTimeLogin', isFirstLogin);
   console.log('logged in user is', loggedInUser, loggedInUser.name);
+  if (isFirstLogin) {
+    navigation.navigate('QuizScreen');
+  }
   const [modalVisible, setModalVisible] = useState(() => {
     if (loggedInUser.concerns) {
       return false;
@@ -79,9 +83,8 @@ const HomeScreen = (props) => {
   }, []);
 
   useEffect(() => {
-    // console.log(selectedConcerns);
-    //console.log('authenticated data', props.auth);
-  });
+  
+  }, [isFirstLogin, navigation]);
 
   useEffect(() => {
     axios('https://accounts.spotify.com/api/token', {

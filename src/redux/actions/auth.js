@@ -3,6 +3,7 @@ import {
   REGISTER_FAIL,
   LOGIN_SUCCESS,
   LOGOUT_USER,
+  RESET_FIRST_TIME_LOGIN,
 } from './type';
 import axios from 'axios';
 import {api_route} from '../../utils/route';
@@ -51,7 +52,7 @@ export const login = ({email, password}) => async (dispatch) => {
 };
 
 export function registerUser({name, email, password, gender, age}) {
-  const user = {name, email, password, age, gender};
+  const user = {name, email, password, age, gender, isFirstTimeLogin: true};
   console.log('user details to signup', user);
   return {
     type: REGISTER_SUCCESS,
@@ -67,8 +68,18 @@ export function loginUser({
   age,
   concerns,
   phone,
+  isFirstTimeLogin,
 }) {
-  const user = {name, email, password, gender, age, concerns, phone};
+  const user = {
+    name,
+    email,
+    password,
+    gender,
+    age,
+    concerns,
+    phone,
+    isFirstTimeLogin,
+  };
   return {
     type: LOGIN_SUCCESS,
     payload: user,
@@ -78,6 +89,13 @@ export function loginUser({
 export function logoutUser() {
   return {
     type: LOGOUT_USER,
+    payload: {},
+  };
+}
+
+export function resetFirstTimeLogin() {
+  return {
+    type: RESET_FIRST_TIME_LOGIN,
     payload: {},
   };
 }

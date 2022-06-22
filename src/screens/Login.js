@@ -43,7 +43,7 @@ const Login = (props) => {
     const user = find(userData, function (user) {
       return user.email === state.email && user.password === state.password;
     });
-
+    console.log('user is', user);
     if (user === undefined) {
       ToastAndroid.show(
         'Email or Password is incorrect. Please try again',

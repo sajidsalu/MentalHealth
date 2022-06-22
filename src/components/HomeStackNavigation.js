@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 const Stack = createStackNavigator();
 import HomeScreen from '../screens/HomeScreen';
@@ -11,12 +11,23 @@ import TrackList from '../screens/TrackList';
 // import FitnessSubScreen from '../screens/FitnessSubScreen';
 import ChatWithTink from '../screens/ChatWithTink';
 import CreateMeme from '../screens/CreateMeme';
+import QuizScreen from '../screens/QuizScreen';
+import QuizResultScreen from '../screens/QuizResult';
+import {useSelector} from 'react-redux';
+import {getLoggedInUser, isFirstTimeLogin} from '../redux/reducers/auth';
 // import BubbleWrapGame from '../screens/BubbleWrapGame';
 // import PunchGame from '../screens/PunchGame';
 
 const HomeStackNavigator = () => {
+  const loggedInUser = useSelector(getLoggedInUser);
+  const [initialRoute, setInitialRoute] = React.useState(() =>
+    loggedInUser.isFirstTimeLogin ? 'QuizScreen' : 'Home',
+  );
+  useEffect(() => {
+    setInitialRoute(loggedInUser.isFirstTimeLogin ? 'QuizScreen' : 'Home');
+  }, [loggedInUser]);
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator initialRouteName={initialRoute}>
       <Stack.Screen
         name="Home"
         component={HomeScreen}
@@ -52,6 +63,27 @@ const HomeStackNavigator = () => {
         component={TrackPlayer}
         options={{headerShown: false}}
       />
+      {loggedInUser.isFirstTimeLogin && (
+        <>
+          <Stack.Screen
+            name="QuizScreen"
+            component={QuizScreen}
+            initialParams={{index: 0}}
+            options={{
+              headerShown: false,
+              tabBarStyle: {
+                display: 'none',
+              },
+              tabBarButton: () => null,
+            }}
+          />
+          <Stack.Screen
+            name="QuizResultScreen"
+            component={QuizResultScreen}
+            options={{headerShown: false}}
+          />
+        </>
+      )}
     </Stack.Navigator>
   );
 };

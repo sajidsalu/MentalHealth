@@ -8,11 +8,12 @@ import {
   LOGIN_SUCCESS,
   LOGOUT_USER,
   UPDATE_USER_DATA,
+  RESET_FIRST_TIME_LOGIN,
 } from '../actions/type';
-import user from './user';
-import find from 'lodash';
+
 const initialState = {
   isLogin: false,
+  isFirstTimeLogin: false,
   user: [],
   profile: {
     name: 'Ritika Tomar',
@@ -27,6 +28,9 @@ export const getUserData = (state) => {
 };
 export const getLoggedInUser = (state) => {
   return state.auth.loggedInUser;
+};
+export const isFirstTimeLogin = (state) => {
+  return state.auth.loggedInUser.isFirstTimeLogin;
 };
 
 const authReducerConfig = {
@@ -86,6 +90,17 @@ function authReducer(state = initialState, action) {
         ...state,
         loggedInUser: {},
         isLogin: false,
+      };
+    }
+    case RESET_FIRST_TIME_LOGIN: {
+      return {
+        ...state,
+        user: state.user.map((user, i) =>
+          user.email === state.loggedInUser.email
+            ? {...user, isFirstTimeLogin: false}
+            : user,
+        ),
+        loggedInUser: {...state.loggedInUser, isFirstTimeLogin: false},
       };
     }
     case UPDATE_USER_DATA: {
