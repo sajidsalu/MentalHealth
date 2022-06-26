@@ -4,7 +4,7 @@ import {quiz as Questions} from '../constants/quizQuestions';
 import {UPDATE_SCORE} from '../redux/actions/type';
 import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-const Quiz = (props) => {
+const QuizOption = (props) => {
   const navigation = useNavigation();
   const [score, setScore] = React.useState(0);
   const dispatch = useDispatch();
@@ -15,8 +15,11 @@ const Quiz = (props) => {
       type: UPDATE_SCORE,
       payload: option,
     });
+    props.onOptionPress(props.qnIndex, option);
     if (props.qnIndex + 1 >= Questions.questions.length) {
-      navigation.navigate('QuizResultScreen');
+      navigation.navigate('QuizResultScreen', {
+        questions: Questions,
+      });
     } else {
       navigation.navigate('QuizScreen', {
         index: props.qnIndex + 1,
@@ -36,7 +39,7 @@ const Quiz = (props) => {
   );
 };
 
-export default Quiz;
+export default QuizOption;
 
 const styles = StyleSheet.create({
   Option: {

@@ -5,14 +5,13 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
 import TherapistStackNavigation from './TherapistStackNavigation';
-// import FitnessScreen from '../screens/FitnessScreen';
 import {colors} from '../constants/theme';
 import HomeStackNavigator from './HomeStackNavigation';
 import StoryScreen from '../screens/StoryScreen';
 import {useSelector} from 'react-redux';
 import {getLoggedInUser} from '../redux/reducers/auth';
 import {useEffect} from 'react';
-// import FitnessStackNavigator from './FitnessStackNavigation'
+import YogaTabScreen from '../screens/yoga/YogaTabScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,7 +36,7 @@ const TabNavigation = () => {
           } else if (route.name === 'Therapist') {
             return <Fontisto name="doctor" size={size} color={color} />;
           } else if (route.name === 'Fitness') {
-            return <Entypo name="check" size={size} color={color} />;
+            return <Entypo name="sports-club" size={size} color={color} />;
           }
         },
       })}
@@ -68,7 +67,7 @@ const TabNavigation = () => {
       />
       <Tab.Screen name="Story" component={StoryScreen} />
       <Tab.Screen name="Therapist" component={TherapistStackNavigation} />
-      {/* <Tab.Screen name="Fitness" component={FitnessStackNavigator} /> */}
+      <Tab.Screen name="Fitness" component={YogaTabScreen} />
     </Tab.Navigator>
   );
 };

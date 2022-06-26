@@ -20,7 +20,7 @@ import {connect, useDispatch, useSelector} from 'react-redux';
 import {updateConcerns, updateUserConcerns} from '../redux/actions/profile';
 import {fetchQuoteOfTheDay} from '../redux/actions/quote';
 import {getLoggedInUser, isFirstTimeLogin} from '../redux/reducers/auth';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const preferences = [
   {
@@ -81,10 +81,6 @@ const HomeScreen = (props) => {
   useEffect(() => {
     fetchQuoteOfTheDay();
   }, []);
-
-  useEffect(() => {
-  
-  }, [isFirstLogin, navigation]);
 
   useEffect(() => {
     axios('https://accounts.spotify.com/api/token', {

@@ -3,13 +3,13 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   ImageBackground,
   Image,
   ScrollView,
+  Modal,
   TouchableOpacity,
 } from 'react-native';
-import {Chip} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 //import { AntDesign,MaterialIcons,Feather,FontAwesome5,MaterialCommunityIcons,Ionicons} from '@expo/vector-icons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -25,18 +25,30 @@ import Appointments from '../components/Appointments';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import {getLoggedInUser} from '../redux/reducers/auth';
 import {logoutUser} from '../redux/actions/auth';
+import {Dimensions} from 'react-native';
+import {DataTable} from 'react-native-paper';
+import {getConcernName} from '../utils/user-concerns-utils';
 
 const ProfileScreen = (props) => {
   const loggedInUser = useSelector(getLoggedInUser);
   const [selectedConcerns, setSelectedConcerns] = useState(
     loggedInUser.concerns,
   );
+  const [modalVisible, setModalVisible] = useState(false);
   console.log('selected concerns', selectedConcerns);
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log('data changed', loggedInUser.concerns);
     setSelectedConcerns(loggedInUser.concerns);
   }, [loggedInUser]);
+
+  const [userConcerns, setUserConcerns] = React.useState([]);
+
+  const calculateScores = () => {};
+
+  useEffect(() => {
+    calculateScores();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.background}>
@@ -113,24 +125,9 @@ const ProfileScreen = (props) => {
         </View>
       </View>
       <View style={styles.concernContainer}>
-        <Text style={styles.concernTitle}>My Concerns:</Text>
-        <View style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
-          {concerns.map((chip) => {
-            return (
-              <Chip
-                key={chip.id}
-                icon={
-                  selectedConcerns.includes(chip.id)
-                    ? 'check-circle-outline'
-                    : 'close-circle-outline'
-                }
-                disabled={selectedConcerns.includes(chip.id) ? false : true}
-                style={styles.chip}>
-                {chip.name}
-              </Chip>
-            );
-          })}
-        </View>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <Text style={styles.concernTitle}>View Concerns</Text>
+        </TouchableOpacity>
       </View>
       <View style={{position: 'relative', top: 60}}>
         <Appointments data={futureData} type="Future" />
@@ -138,6 +135,34 @@ const ProfileScreen = (props) => {
       <View style={{position: 'relative', top: 60, marginBottom: 70}}>
         <Appointments data={pastData} type="Past" />
       </View>
+
+      <Modal animationType="slide" transparent={true} visible={modalVisible}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <DataTable style={styles.DataTable}>
+              <DataTable.Header>
+                <DataTable.Title>User Concerns</DataTable.Title>
+                <DataTable.Title numeric>Score</DataTable.Title>
+              </DataTable.Header>
+
+              {selectedConcerns.map((item) => {
+                return (
+                  <DataTable.Row key={item.key}>
+                    <DataTable.Cell>{getConcernName(item.key)}</DataTable.Cell>
+                    <DataTable.Cell numeric>{item.value}</DataTable.Cell>
+                  </DataTable.Row>
+                );
+              })}
+            </DataTable>
+            <Button
+              mode="outlined"
+              onPress={() => setModalVisible(false)}
+              color={colors.primary}>
+              Close
+            </Button>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -229,4 +254,29 @@ const styles = StyleSheet.create({
     margin: 5,
     backgroundColor: colors.accent,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalView: {
+    margin: 30,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    width: Dimensions.get('window').width - 20,
+  },
+  DataTable: {marginTop: 0, padding: 10},
 });

@@ -1,15 +1,18 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import YogaScreen from '../screens/YogaScreen';
+
 const Stack = createStackNavigator();
-import FitnessScreen from '../screens/FitnessScreen';
-import FitnessSubScreen from '../screens/FitnessSubScreen';
-import FitnessContent from '../screens/FitnessContent';
-import IndividualFitnessContent from '../screens/IndividualFitnessContent';
 
 const FitnessStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name="YogaScreen"
+        component={YogaScreen}
+        options={{headerShown: false}}
+      />
+      {/* <Stack.Screen
         name="FitnessScreen"
         component={FitnessScreen}
         options={{headerShown: false}}
@@ -29,7 +32,7 @@ const FitnessStackNavigator = () => {
         name="IndividualFitnessContent"
         component={IndividualFitnessContent}
         options={{headerShown: false}}
-      />
+      /> */}
     </Stack.Navigator>
   );
 };

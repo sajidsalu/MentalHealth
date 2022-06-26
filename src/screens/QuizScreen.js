@@ -1,14 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import {useNavigation} from '@react-navigation/native';
+import {cloneDeep} from 'lodash';
 import React from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import Quiz from '../components/QuizComponent';
+import QuizOption from '../components/QuizComponent';
 import {quiz as Questions} from '../constants/quizQuestions';
 
 export default function QuizScreen({route}) {
   const navigation = useNavigation();
-  const {index} = route.params;
+  let {index} = route.params;
 
+  const onOptionPress = (questionIndex, option) => {
+    Questions.questions[questionIndex].selectedOption = option;
+  };
   return (
     <ScrollView style={{flex: 1}}>
       <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
@@ -18,12 +22,14 @@ export default function QuizScreen({route}) {
       </View>
       <Text style={styles.Question}>{Questions.questions[index].question}</Text>
       {Questions.questions[index].answers.map((option, i) => (
-        <Quiz
+        <QuizOption
+          questions={Questions}
           value={option}
           navigation={navigation}
           optionIdx={Number(i + 1)}
           qnIndex={index}
           key={i}
+          onOptionPress={onOptionPress}
         />
       ))}
     </ScrollView>

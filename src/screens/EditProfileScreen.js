@@ -171,6 +171,7 @@ const Profile = (props) => {
             padding: 20,
             paddingTop: 5,
             paddingBottom: 5,
+            marginTop: 10,
           }}>
           <Text>Male: </Text>
           {Gender('male')}
@@ -226,28 +227,12 @@ const Profile = (props) => {
             keyboardType="numeric"
           />
         </View>
-        <View>
-          <Text style={styles.problemText}>My Concerns: </Text>
-          <View style={styles.problemsBox}>
-            {concerns.map((prob) => {
-              return (
-                <View key={prob.id} style={styles.problemsPart}>
-                  {Problem(prob)}
-                </View>
-              );
-            })}
-          </View>
-        </View>
         <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-          }}>
+          style={styles.saveButton}>
           <Button
             mode="contained"
             color="#face4b"
-            style={{width: '60%', borderRadius: 20, marginTop: 20}}
+            style={{width: '60%', borderRadius: 20}}
             onPress={submitHandler}>
             <Text style={{color: colors.white}}>Save Changes</Text>
           </Button>
@@ -303,6 +288,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 10,
   },
   inputBox2: {
     display: 'flex',
@@ -344,5 +330,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
+  },
+  saveButton: {
+    display: 'flex',
+    bottom: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    alignContent: 'flex-end',
+    marginTop: 30,
   },
 });
