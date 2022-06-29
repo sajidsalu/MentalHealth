@@ -12,6 +12,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import YogaScreenOne from './YogaScreenOne';
 import YogaScreenTwo from './YogaScreenTwo';
 import {colors} from '../../constants/theme';
+import FitnessCategories from './FitnessCategoryList';
 
 // function AddBlogScreen() {
 //   return <BlogMainScreen />;
@@ -44,6 +45,7 @@ function YogaTabScreen() {
           }
         },
       })}>
+      <Tab.Screen name="Fitness Category" component={FitnessCategories} />
       <Tab.Screen name="Yoga" component={YogaScreenOne} />
       <Tab.Screen name="Fitness" component={YogaScreenTwo} />
     </Tab.Navigator>

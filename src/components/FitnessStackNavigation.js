@@ -1,16 +1,32 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import YogaScreen from '../screens/YogaScreen';
+import FitnessCategories from '../screens/yoga/FitnessCategoryList';
+import FitnessDetails from '../screens/yoga/FitnessDetails';
+import {colors} from '../constants/theme';
 
 const Stack = createStackNavigator();
 
 const FitnessStackNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      options={{
+        headerShown: true,
+        headerTintColor: colors.primary,
+        headerStyle: {
+          backgroundColor: colors.primary,
+        },
+      }}>
       <Stack.Screen
-        name="YogaScreen"
-        component={YogaScreen}
+        name="FitnessScreen"
+        component={FitnessCategories}
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="FitnessDetailsScreen"
+        component={FitnessDetails}
+        options={{
+          headerShown: false,
+        }}
       />
       {/* <Stack.Screen
         name="FitnessScreen"

@@ -12,6 +12,7 @@ import {useSelector} from 'react-redux';
 import {getLoggedInUser} from '../redux/reducers/auth';
 import {useEffect} from 'react';
 import YogaTabScreen from '../screens/yoga/YogaTabScreen';
+import FitnessStackNavigator from './FitnessStackNavigation';
 
 const Tab = createBottomTabNavigator();
 
@@ -67,7 +68,7 @@ const TabNavigation = () => {
       />
       <Tab.Screen name="Story" component={StoryScreen} />
       <Tab.Screen name="Therapist" component={TherapistStackNavigation} />
-      <Tab.Screen name="Fitness" component={YogaTabScreen} />
+      <Tab.Screen name="Fitness" component={FitnessStackNavigator} />
     </Tab.Navigator>
   );
 };

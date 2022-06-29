@@ -1,7 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, View, LogBox, Image} from 'react-native';
 import ChatBot from 'react-native-chatbot';
+import {useSelector} from 'react-redux';
 import {colors} from '../constants/theme';
+import {getLoggedInUser} from '../redux/reducers/auth';
 LogBox.ignoreAllLogs();
 
 const SmileyGif = () => {
@@ -18,11 +20,12 @@ const SmileyGif = () => {
   );
 };
 
-const ChatWithTink = props => {
+const ChatWithTink = (props) => {
+  const loggedInUser = useSelector(getLoggedInUser);
   const steps = [
     {
       id: '0',
-      message: `Hey, ${props.route.params.name}! I'm Tink`,
+      message: `Hey, ${loggedInUser.name}! I'm Tink`,
       trigger: '1',
     },
     {
@@ -35,15 +38,34 @@ const ChatWithTink = props => {
       message: 'How can I help you?',
       trigger: '3',
     },
-
     {
       id: '3',
       options: [
-        {value: 1, label: 'Need motivation!', trigger: '5'},
-        {value: 2, label: 'Cheer me up!', trigger: '10'},
-        {value: 3, label: 'Not feeling good!'},
-        {value: 4, label: 'Day was not good!'},
-        {value: 5, label: 'Feeling Happy today'},
+        {
+          value: 1,
+          label: 'Need motivation!',
+          trigger: '5',
+        },
+        {
+          value: 2,
+          label: 'Cheer me up!',
+          trigger: '10',
+        },
+        {
+          value: 3,
+          label: 'Not feeling good!',
+          trigger: '17',
+        },
+        {
+          value: 4,
+          label: 'Day was not good!',
+          trigger: '18',
+        },
+        {
+          value: 5,
+          label: 'Feeling Happy today',
+          trigger: '19',
+        },
       ],
     },
     {
@@ -66,8 +88,16 @@ const ChatWithTink = props => {
     {
       id: '8',
       options: [
-        {value: 1, label: 'Another quote', trigger: '14'},
-        {value: 2, label: 'Feeling motivated', trigger: '9'},
+        {
+          value: 1,
+          label: 'Another quote',
+          trigger: '14',
+        },
+        {
+          value: 2,
+          label: 'Feeling motivated',
+          trigger: '9',
+        },
       ],
     },
     {
@@ -83,14 +113,22 @@ const ChatWithTink = props => {
     {
       id: '11',
       message:
-        'A dad walks into his sons room and says,"Son I told you time after time," if you keep that up you\'re going to get blind. His son says, "dad I\'m over here',
+        'A dad walks into his sons room and says,"Son I told you time after time," if you keep that up you\\\'re going to get blind. His son says, "dad I\\\'m over here',
       trigger: '12',
     },
     {
       id: '12',
       options: [
-        {value: 1, label: 'Funny', trigger: '13'},
-        {value: 2, label: 'Bad one', trigger: '14'},
+        {
+          value: 1,
+          label: 'Funny',
+          trigger: '13',
+        },
+        {
+          value: 2,
+          label: 'Bad one',
+          trigger: '14',
+        },
       ],
     },
     {
@@ -113,7 +151,25 @@ const ChatWithTink = props => {
       id: '16',
       message:
         'The future belongs to those who believe in the beauty of their dreams. -Eleanor Roosevelt',
-      trigger: 8,
+      trigger: '8',
+    },
+    {
+      id: '17',
+      message:
+        'Sorry to hear that you are not feeling well. I can help you with some motivation.',
+      trigger: '6',
+    },
+    {
+      id: '18',
+      message:
+        "Sorry to hear that your day did\\'t go well. I can help you with some motivation.",
+      trigger: '6',
+    },
+    {
+      id: '19',
+      message:
+        "Glad to hear that you\\'re feeling happy today! Keep going. I can help you motivate to keep it going.",
+      trigger: '6',
     },
   ];
 

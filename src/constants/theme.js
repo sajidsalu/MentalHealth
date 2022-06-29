@@ -17,7 +17,9 @@ const colors = {
   lightLilac: '#ffefef',
   cream: '#fdfff5',
   brown: '#8d5845',
-  yellow: '#face1b'
+  yellow: '#face1b',
+  royalBlue: '#4169e1',
+  shareGreen: '#369e19',
 };
 
 const sizes = {
